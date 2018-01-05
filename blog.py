@@ -2,7 +2,7 @@
 
 # imports
 from flask import Flask, render_template, request, session, \
-    flask, redirect, url_for, g
+    flash, redirect, url_for, g
 import sqlite3
 
 # configuration
