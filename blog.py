@@ -7,6 +7,9 @@ import sqlite3
 
 # configuration
 DATABASE = 'blog.db'
+USERNAME = 'admin'
+PASSWORD = 'admin'
+SECRET_KEY = 'thisisonlyfortestingsoisuselessandnotsecure'
 
 app = Flask(__name__)
 
@@ -18,9 +21,22 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 # routes
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    error = None
+    status_code = 200
+    #if its a post request do the following
+    if request.method == 'POST':
+        #if the entered info doesnt match the username/pass in the config, give an error
+        if request.form['username'] != app.config['USERNAME'] or \
+            request.form['password'] != app.config['PASSWORD']:
+                error = 'Invalid Credentials. Plesae try again.'
+                status_code = 401
+        else:
+            #set session to logged in and redirect to the main page
+            session['logged_in'] = True
+            return redirect(url_for('main'))
+    return render_template("login.html", error=error), status_code
 
 @app.route("/main")
 def main():
