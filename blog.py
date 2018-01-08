@@ -58,7 +58,11 @@ def logout():
 @app.route("/main")
 @login_required
 def main():
-    return render_template("main.html")
+    g.db = connect_db()
+    cur = g.db.execute('select * from posts') #fetch data from the posts table in db
+    posts = [dict(title=row[0], poast=row[1] for row in cur.fetchall())] #creates array of dicts
+    d.db.close()
+    return render_template("main.html", posts=posts)
 
 #run the app if launched from this file
 if __name__ == '__main__':
