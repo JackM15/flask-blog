@@ -8,6 +8,14 @@
 </head>
 <body>
     <div class="container">
+        {% for meessage in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}</p>
+        {% endif %}
+
+        <!-- Inherited content -->
         {% block content %}
         {% endblock %}
     </div>
